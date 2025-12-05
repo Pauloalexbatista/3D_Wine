@@ -67,7 +67,13 @@ export default function Home() {
                 <div className="product-image-wrapper">
                   <div className="product-badge">Novo</div>
                   <div className="product-image-placeholder">
-                    🍷
+                    <Image
+                      src="/images/products/douro-2018.png"
+                      alt="Reserva do Douro 2018"
+                      fill
+                      style={{ objectFit: 'contain', padding: '1rem' }}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                   </div>
                 </div>
                 <div className="product-content">
@@ -88,7 +94,13 @@ export default function Home() {
                 <div className="product-image-wrapper">
                   <div className="product-badge badge-exclusive">Exclusivo</div>
                   <div className="product-image-placeholder">
-                    🍷
+                    <Image
+                      src="/images/products/alentejo-2019.png"
+                      alt="Quinta do Alentejo 2019"
+                      fill
+                      style={{ objectFit: 'contain', padding: '1rem' }}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                   </div>
                 </div>
                 <div className="product-content">
@@ -109,7 +121,13 @@ export default function Home() {
                 <div className="product-image-wrapper">
                   <div className="product-badge">Premium</div>
                   <div className="product-image-placeholder">
-                    🍷
+                    <Image
+                      src="/images/products/grande-reserva-2015.png"
+                      alt="Grande Reserva 2015"
+                      fill
+                      style={{ objectFit: 'contain', padding: '1rem' }}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                   </div>
                 </div>
                 <div className="product-content">
@@ -139,8 +157,8 @@ export default function Home() {
           <div className="about-grid">
             <div className="about-image">
               <Image
-                src="/images/brand/cellar-1.png"
-                alt="3G Wine Cellar"
+                src="/images/brand/vineyard-sunset-house.jpg"
+                alt="3G Wine Vineyard"
                 fill
                 style={{ objectFit: 'cover' }}
                 quality={100}

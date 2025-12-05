@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import './page.css';
@@ -16,6 +17,7 @@ const allProducts = [
         price: 45,
         description: 'Um vinho robusto com notas de frutas maduras, especiarias e carvalho. Ideal para acompanhar carnes vermelhas.',
         featured: true,
+        image: '/images/products/douro-2018.png',
     },
     {
         id: 2,
@@ -26,6 +28,7 @@ const allProducts = [
         price: 38,
         description: 'Elegante e fresco, com aromas a citrinos, flores brancas e notas minerais. Perfeito para peixe e marisco.',
         featured: true,
+        image: '/images/products/alentejo-2019.png',
     },
     {
         id: 3,
@@ -36,6 +39,7 @@ const allProducts = [
         price: 85,
         description: 'Complexo e elegante, com taninos macios e longo final. Ideal para ocasiões especiais.',
         featured: false,
+        image: '/images/products/grande-reserva-2015.png',
     },
     {
         id: 4,
@@ -46,6 +50,7 @@ const allProducts = [
         price: 18,
         description: 'Leve, fresco e ligeiramente efervescente. Perfeito para dias quentes de verão.',
         featured: false,
+        image: '/images/products/vinho-verde-2022.png',
     },
     {
         id: 5,
@@ -56,6 +61,7 @@ const allProducts = [
         price: 25,
         description: 'Frutado e refrescante, com notas de morango e framboesa. Ideal para aperitivos.',
         featured: false,
+        image: '/images/products/rose-2022.png',
     },
     {
         id: 6,
@@ -66,6 +72,7 @@ const allProducts = [
         price: 55,
         description: 'Espumante elegante com bolhas finas. Perfeito para celebrações e brunch.',
         featured: false,
+        image: '/images/products/espumante-2020.png',
     },
 ];
 
@@ -186,7 +193,13 @@ export default function LojaPage() {
                                             <div className="product-badge">Destaque</div>
                                         )}
                                         <div className="product-image-placeholder">
-                                            🍷
+                                            <Image
+                                                src={product.image}
+                                                alt={product.name}
+                                                fill
+                                                style={{ objectFit: 'contain', padding: '1rem' }}
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            />
                                         </div>
                                     </div>
 

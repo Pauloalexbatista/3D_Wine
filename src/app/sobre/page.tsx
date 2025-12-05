@@ -9,12 +9,11 @@ export default function SobrePage() {
             <Header />
 
             <main className="sobre-page">
-                {/* Hero Section */}
                 <section className="sobre-hero">
                     <div className="sobre-hero-image">
                         <Image
-                            src="/images/brand/logo-1.png"
-                            alt="3G Wine Logo"
+                            src="/images/brand/tasting-room-vineyard.jpg"
+                            alt="3G Wine Tasting Room"
                             fill
                             style={{ objectFit: 'cover' }}
                             priority
@@ -62,8 +61,8 @@ export default function SobrePage() {
 
                             <div className="story-image">
                                 <Image
-                                    src="/images/brand/cellar-1.png"
-                                    alt="3G Wine Cellar"
+                                    src="/images/brand/vineyard-sunset-house.jpg"
+                                    alt="Vineyard at Sunset"
                                     fill
                                     style={{ objectFit: 'cover' }}
                                 />
