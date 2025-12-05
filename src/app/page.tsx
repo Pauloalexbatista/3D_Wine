@@ -1,65 +1,204 @@
-import Image from "next/image";
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Link from 'next/link';
+import Image from 'next/image';
+import './page.css';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <>
+      <Header />
+
+      <main className="home-page">
+        {/* Hero Section */}
+        <section className="hero">
+          <div className="hero-background">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src="/images/brand/cellar-2.jpg"
+              alt="3G Wine Cellar"
+              fill
+              style={{ objectFit: 'cover' }}
+              priority
+              quality={100}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <div className="hero-overlay"></div>
+          </div>
+
+          <div className="hero-content">
+            <div className="hero-badge animate-fadeIn">Reserva Exclusiva</div>
+            <h1 className="hero-title animate-fadeIn">
+              Bem-vindo à <span className="text-gold">3G Wine</span>
+            </h1>
+            <p className="hero-subtitle animate-fadeIn">
+              Uma seleção premium de vinhos para os verdadeiros apreciadores
+            </p>
+            <div className="hero-buttons animate-fadeIn">
+              <Link href="/loja" className="btn btn-primary">
+                Explore a Nossa Seleção
+              </Link>
+              <Link href="/sobre" className="btn btn-outline">
+                Conheça a Nossa História
+              </Link>
+            </div>
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="scroll-indicator">
+            <div className="scroll-mouse">
+              <div className="scroll-wheel"></div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Products Section */}
+        <section className="featured-section">
+          <div className="container">
+            <div className="section-header">
+              <h2 className="section-title">Destaques</h2>
+              <div className="divider-gold"></div>
+              <p className="section-subtitle">
+                Os nossos vinhos mais prestigiados e procurados
+              </p>
+            </div>
+
+            <div className="products-grid">
+              {/* Product 1 */}
+              <div className="product-card">
+                <div className="product-image-wrapper">
+                  <div className="product-badge">Novo</div>
+                  <div className="product-image-placeholder">
+                    🍷
+                  </div>
+                </div>
+                <div className="product-content">
+                  <h3 className="product-name">Reserva do Douro 2018</h3>
+                  <p className="product-type">Vinho Tinto</p>
+                  <p className="product-description">
+                    Um vinho robusto com notas de frutas maduras e carvalho
+                  </p>
+                  <div className="product-footer">
+                    <span className="product-price">€45,00</span>
+                    <button className="btn-add-cart">Adicionar</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Product 2 */}
+              <div className="product-card">
+                <div className="product-image-wrapper">
+                  <div className="product-badge badge-exclusive">Exclusivo</div>
+                  <div className="product-image-placeholder">
+                    🍷
+                  </div>
+                </div>
+                <div className="product-content">
+                  <h3 className="product-name">Quinta do Alentejo 2019</h3>
+                  <p className="product-type">Vinho Branco</p>
+                  <p className="product-description">
+                    Elegante e fresco, com aromas a citrinos e flores brancas
+                  </p>
+                  <div className="product-footer">
+                    <span className="product-price">€38,00</span>
+                    <button className="btn-add-cart">Adicionar</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Product 3 */}
+              <div className="product-card">
+                <div className="product-image-wrapper">
+                  <div className="product-badge">Premium</div>
+                  <div className="product-image-placeholder">
+                    🍷
+                  </div>
+                </div>
+                <div className="product-content">
+                  <h3 className="product-name">Grande Reserva 2015</h3>
+                  <p className="product-type">Vinho Tinto</p>
+                  <p className="product-description">
+                    Complexo e elegante, ideal para ocasiões especiais
+                  </p>
+                  <div className="product-footer">
+                    <span className="product-price">€85,00</span>
+                    <button className="btn-add-cart">Adicionar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="section-cta">
+              <Link href="/loja" className="btn btn-secondary">
+                Ver Toda a Coleção
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* About Preview Section */}
+        <section className="about-preview">
+          <div className="about-grid">
+            <div className="about-image">
+              <Image
+                src="/images/brand/cellar-1.png"
+                alt="3G Wine Cellar"
+                fill
+                style={{ objectFit: 'cover' }}
+                quality={100}
+              />
+              <div className="about-image-overlay"></div>
+            </div>
+
+            <div className="about-content">
+              <div className="about-badge">A Nossa História</div>
+              <h2 className="about-title">
+                Paixão pelo Vinho, <br />
+                <span className="text-gold">Compromisso com a Excelência</span>
+              </h2>
+              <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
+              <p className="about-text">
+                Na 3G Wine, selecionamos cuidadosamente cada garrafa para oferecer
+                aos nossos clientes uma experiência única e memorável. Os nossos vinhos
+                são escolhidos a dedo das melhores quintas de Portugal e do mundo.
+              </p>
+              <p className="about-text">
+                Com anos de experiência e uma paixão inabalável pelo vinho,
+                garantimos que cada produto na nossa seleção representa o melhor
+                em qualidade, sabor e tradição.
+              </p>
+              <Link href="/sobre" className="btn btn-outline">
+                Saiba Mais Sobre Nós
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Newsletter Section */}
+        <section className="newsletter-cta">
+          <div className="container">
+            <div className="newsletter-content">
+              <div className="newsletter-icon">📧</div>
+              <h2 className="newsletter-title">Receba as Nossas Novidades</h2>
+              <p className="newsletter-text">
+                Subscreva a nossa newsletter e fique a par de lançamentos exclusivos,
+                promoções especiais e eventos.
+              </p>
+              <form className="newsletter-form-main">
+                <input
+                  type="email"
+                  placeholder="O seu endereço de email"
+                  className="newsletter-input-main"
+                  required
+                />
+                <button type="submit" className="btn btn-primary">
+                  Subscrever
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+
+      <Footer />
+    </>
   );
 }
