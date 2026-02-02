@@ -25,7 +25,7 @@ export default function Home() {
           </div>
 
           <div className="hero-content">
-            <div className="hero-badge animate-fadeIn">Reserva Exclusiva</div>
+            <div className="hero-badge animate-fadeIn">Garrafeira exclusiva</div>
             <h1 className="hero-title animate-fadeIn">
               Bem-vindo à <span className="text-gold">3G Wine</span>
             </h1>

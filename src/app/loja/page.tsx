@@ -1,91 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useCart } from '@/context/CartContext';
+import { supabase } from '@/lib/supabase';
 import './page.css';
 
-// Mock product data
-const allProducts = [
-    {
-        id: 1,
-        name: 'Reserva do Douro 2018',
-        type: 'Tinto',
-        region: 'Douro',
-        year: 2018,
-        price: 45,
-        description: 'Um vinho robusto com notas de frutas maduras, especiarias e carvalho. Ideal para acompanhar carnes vermelhas.',
-        featured: true,
-        image: '/images/products/douro-2018.png',
-    },
-    {
-        id: 2,
-        name: 'Quinta do Alentejo 2019',
-        type: 'Branco',
-        region: 'Alentejo',
-        year: 2019,
-        price: 38,
-        description: 'Elegante e fresco, com aromas a citrinos, flores brancas e notas minerais. Perfeito para peixe e marisco.',
-        featured: true,
-        image: '/images/products/alentejo-2019.png',
-    },
-    {
-        id: 3,
-        name: 'Grande Reserva 2015',
-        type: 'Tinto',
-        region: 'Dão',
-        year: 2015,
-        price: 85,
-        description: 'Complexo e elegante, com taninos macios e longo final. Ideal para ocasiões especiais.',
-        featured: false,
-        image: '/images/products/grande-reserva-2015.png',
-    },
-    {
-        id: 4,
-        name: 'Vinho Verde Premium',
-        type: 'Branco',
-        region: 'Minho',
-        year: 2022,
-        price: 18,
-        description: 'Leve, fresco e ligeiramente efervescente. Perfeito para dias quentes de verão.',
-        featured: false,
-        image: '/images/products/vinho-verde-2022.png',
-    },
-    {
-        id: 5,
-        name: 'Rosé de Verão',
-        type: 'Rosé',
-        region: 'Lisboa',
-        year: 2022,
-        price: 25,
-        description: 'Frutado e refrescante, com notas de morango e framboesa. Ideal para aperitivos.',
-        featured: false,
-        image: '/images/products/rose-2022.png',
-    },
-    {
-        id: 6,
-        name: 'Espumante Bruto',
-        type: 'Espumante',
-        region: 'Bairrada',
-        year: 2020,
-        price: 55,
-        description: 'Espumante elegante com bolhas finas. Perfeito para celebrações e brunch.',
-        featured: false,
-        image: '/images/products/espumante-2020.png',
-    },
-];
+interface Product {
+    id: number;
+    name: string;
+    type: string;
+    region: string;
+    year: number;
+    price: number;
+    description: string;
+    featured: boolean;
+    image: string;
+}
 
 export default function LojaPage() {
+    const { addToCart } = useCart();
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
     const [selectedType, setSelectedType] = useState<string>('Todos');
     const [priceRange, setPriceRange] = useState<string>('Todos');
     const [sortBy, setSortBy] = useState<string>('featured');
 
-    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante'];
+    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros'];
     const priceRanges = ['Todos', '0-30€', '30-50€', '50-100€', '100+€'];
 
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    async function fetchProducts() {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('products')
+                .select('*');
+
+            if (error) throw error;
+            if (data) setProducts(data);
+        } catch (error) {
+            console.error('Erro ao carregar produtos:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     // Filter products
-    let filteredProducts = [...allProducts];
+    let filteredProducts = [...products];
 
     if (selectedType !== 'Todos') {
         filteredProducts = filteredProducts.filter(p => p.type === selectedType);
@@ -108,6 +75,10 @@ export default function LojaPage() {
         filteredProducts.sort((a, b) => b.price - a.price);
     } else if (sortBy === 'name') {
         filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'featured') {
+        // Sort by id for now as proxy for default, or if we had a featured column we could use it
+        // The mock data had featured boolean, let's assume Supabase has it or we sort by ID
+        filteredProducts.sort((a, b) => (b.featured === a.featured ? 0 : b.featured ? 1 : -1));
     }
 
     return (
@@ -177,7 +148,7 @@ export default function LojaPage() {
                         </div>
 
                         <div className="results-count">
-                            {filteredProducts.length} {filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}
+                            {loading ? 'Carregando...' : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`}
                         </div>
                     </div>
                 </section>
@@ -185,50 +156,62 @@ export default function LojaPage() {
                 {/* Products Grid */}
                 <section className="products-section">
                     <div className="container">
-                        <div className="products-grid">
-                            {filteredProducts.map(product => (
-                                <div key={product.id} className="product-card">
-                                    <div className="product-image-wrapper">
-                                        {product.featured && (
-                                            <div className="product-badge">Destaque</div>
-                                        )}
-                                        <div className="product-image-placeholder">
-                                            <Image
-                                                src={product.image}
-                                                alt={product.name}
-                                                fill
-                                                style={{ objectFit: 'contain', padding: '1rem' }}
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            />
+                        {loading ? (
+                            <div className="flex justify-center items-center py-20">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                            </div>
+                        ) : (
+                            <div className="products-grid">
+                                {filteredProducts.map(product => (
+                                    <div key={product.id} className="product-card">
+                                        <div className="product-image-wrapper">
+                                            {product.featured && (
+                                                <div className="product-badge">Destaque</div>
+                                            )}
+                                            <div className="product-image-placeholder">
+                                                <Image
+                                                    src={product.image || '/images/products/douro-2018.png'}
+                                                    alt={product.name}
+                                                    fill
+                                                    style={{ objectFit: 'contain', padding: '1rem' }}
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="product-content">
+                                            <div className="product-header">
+                                                <h3 className="product-name">{product.name}</h3>
+                                                <span className="product-type">{product.type}</span>
+                                            </div>
+
+                                            <div className="product-meta">
+                                                <span className="product-region">📍 {product.region || 'Portugal'}</span>
+                                                <span className="product-year">🗓️ {product.year}</span>
+                                            </div>
+
+                                            <p className="product-description">{product.description}</p>
+
+                                            <div className="product-footer">
+                                                <span className="product-price">€{product.price.toFixed(2)}</span>
+                                                <button
+                                                    className="btn-add-cart"
+                                                    onClick={() => {
+                                                        addToCart(product);
+                                                        // alert removed for smoother UX or replace with toast later
+                                                    }}
+                                                >
+                                                    <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                                    </svg>
+                                                    Adicionar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div className="product-content">
-                                        <div className="product-header">
-                                            <h3 className="product-name">{product.name}</h3>
-                                            <span className="product-type">{product.type}</span>
-                                        </div>
-
-                                        <div className="product-meta">
-                                            <span className="product-region">📍 {product.region}</span>
-                                            <span className="product-year">🗓️ {product.year}</span>
-                                        </div>
-
-                                        <p className="product-description">{product.description}</p>
-
-                                        <div className="product-footer">
-                                            <span className="product-price">€{product.price.toFixed(2)}</span>
-                                            <button className="btn-add-cart">
-                                                <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                </svg>
-                                                Adicionar
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
 
                         {filteredProducts.length === 0 && (
                             <div className="no-results">

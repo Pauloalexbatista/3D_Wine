@@ -29,9 +29,9 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg,
-            rgba(10, 10, 10, 0.3) 0%,
-            rgba(10, 10, 10, 0.7) 50%,
-            rgba(10, 10, 10, 0.9) 100%);
+            rgba(10, 10, 10, 0.1) 0%,
+            rgba(10, 10, 10, 0.3) 50%,
+            rgba(10, 10, 10, 0.6) 100%);
     z-index: 1;
 }
 
@@ -64,6 +64,7 @@
     margin-bottom: var(--spacing-md);
     line-height: 1.1;
     animation-delay: 0.4s;
+    color: var(--color-light);
 }
 
 .text-gold {
@@ -318,7 +319,7 @@
     inset: 0;
     background: linear-gradient(90deg,
             transparent 0%,
-            rgba(10, 10, 10, 0.8) 100%);
+            rgba(10, 10, 10, 0.4) 100%);
     z-index: 1;
 }
 

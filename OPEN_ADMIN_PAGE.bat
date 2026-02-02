@@ -1,0 +1,3 @@
+@echo off
+echo A abrir o Painel de Administracao...
+start http://localhost:3000/admin

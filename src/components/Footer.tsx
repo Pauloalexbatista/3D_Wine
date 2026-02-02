@@ -1,10 +1,42 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 import './Footer.css';
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [message, setMessage] = useState('');
+
+    const handleSubscribe = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('loading');
+        setMessage('');
+
+        try {
+            const { error } = await supabase
+                .from('newsletter_subscribers')
+                .insert([{ email }]);
+
+            if (error) {
+                if (error.code === '23505') { // Unique violation
+                    throw new Error('Este email já está registado.');
+                }
+                throw error;
+            }
+
+            setStatus('success');
+            setMessage('Obrigado por subscrever!');
+            setEmail('');
+        } catch (error: any) {
+            console.error('Newsletter error:', error);
+            setStatus('error');
+            setMessage(error.message || 'Erro ao subscrever. Tente novamente.');
+        }
+    };
 
     const quickLinks = [
         { href: '/', label: 'Home' },
@@ -45,10 +77,9 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="footer-section">
                         <div className="footer-logo">
-                            <span className="logo-text">3G</span>
-                            <span className="logo-subtitle">WINE</span>
+                            <span className="logo-text">3G Wine</span>
                         </div>
-                        <p className="footer-tagline">Reserva Exclusiva</p>
+                        <p className="footer-tagline">Garrafeira exclusiva</p>
                         <p className="footer-description">
                             Vinhos premium selecionados com paixão e dedicação para os verdadeiros apreciadores.
                         </p>
@@ -74,15 +105,18 @@ export default function Footer() {
                         <ul className="footer-info">
                             <li>
                                 <span className="info-icon">📍</span>
-                                Rua do Vinho, 123, Lisboa
+                                Rua António França Borges N-14 B<br />
+                                2625-187 Póvoa de Santa Iria
                             </li>
                             <li>
                                 <span className="info-icon">📧</span>
-                                info@3gwine.pt
+                                3gwine@gmail.com<br />
+                                Virtual.mm.wines@gmail.com
                             </li>
                             <li>
                                 <span className="info-icon">📞</span>
-                                +351 912 345 678
+                                963 908 617<br />
+                                21 959 15 22
                             </li>
                         </ul>
                     </div>
@@ -93,17 +127,33 @@ export default function Footer() {
                         <p className="footer-newsletter-text">
                             Receba as nossas novidades e ofertas exclusivas
                         </p>
-                        <form className="newsletter-form">
+                        <form className="newsletter-form" onSubmit={handleSubscribe}>
                             <input
                                 type="email"
                                 placeholder="O seu email"
                                 className="newsletter-input"
                                 required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                disabled={status === 'loading' || status === 'success'}
                             />
-                            <button type="submit" className="newsletter-button">
-                                Subscrever
+                            <button
+                                type="submit"
+                                className="newsletter-button"
+                                disabled={status === 'loading' || status === 'success'}
+                            >
+                                {status === 'loading' ? '...' : status === 'success' ? '✓' : 'Subscrever'}
                             </button>
                         </form>
+                        {message && (
+                            <p style={{
+                                marginTop: '0.5rem',
+                                fontSize: '0.875rem',
+                                color: status === 'error' ? '#f87171' : '#4ade80'
+                            }}>
+                                {message}
+                            </p>
+                        )}
                     </div>
                 </div>
 

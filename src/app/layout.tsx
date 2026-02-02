@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { CartProvider } from '@/context/CartContext';
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "3G Wine | Reserva Exclusiva - Vinhos Premium",
+  title: "3G Wine | Garrafeira exclusiva - Vinhos Premium",
   description: "Descubra a nossa seleção exclusiva de vinhos premium. Qualidade, tradição e excelência em cada garrafa.",
-  keywords: "vinhos, vinho premium, loja de vinhos, vinho português, reserva exclusiva",
+  keywords: "vinhos, vinho premium, loja de vinhos, vinho português, garrafeira exclusiva",
 };
 
 export default function RootLayout({
@@ -14,8 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt">
-      <body>
-        {children}
+      <body className="antialiased" suppressHydrationWarning>
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
