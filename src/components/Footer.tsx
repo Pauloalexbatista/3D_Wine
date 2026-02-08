@@ -23,7 +23,9 @@ export default function Footer() {
 
             if (error) {
                 if (error.code === '23505') { // Unique violation
-                    throw new Error('Este email já está registado.');
+                    setStatus('error');
+                    setMessage('Este email já está registado.');
+                    return;
                 }
                 throw error;
             }

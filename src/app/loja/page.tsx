@@ -27,6 +27,8 @@ export default function LojaPage() {
     const [selectedType, setSelectedType] = useState<string>('Todos');
     const [priceRange, setPriceRange] = useState<string>('Todos');
     const [sortBy, setSortBy] = useState<string>('featured');
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
 
     const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros'];
     const priceRanges = ['Todos', '0-30€', '30-50€', '50-100€', '100+€'];
@@ -163,7 +165,8 @@ export default function LojaPage() {
                         ) : (
                             <div className="products-grid">
                                 {filteredProducts.map(product => (
-                                    <div key={product.id} className="product-card">
+                                    <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
+
                                         <div className="product-image-wrapper">
                                             {product.featured && (
                                                 <div className="product-badge">Destaque</div>
@@ -196,10 +199,12 @@ export default function LojaPage() {
                                                 <span className="product-price">€{product.price.toFixed(2)}</span>
                                                 <button
                                                     className="btn-add-cart"
-                                                    onClick={() => {
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
                                                         addToCart(product);
                                                         // alert removed for smoother UX or replace with toast later
                                                     }}
+
                                                 >
                                                     <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -223,6 +228,57 @@ export default function LojaPage() {
                     </div>
                 </section>
             </main>
+
+            {selectedProduct && (
+                <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <button className="modal-close-btn" onClick={() => setSelectedProduct(null)}>
+                            &times;
+                        </button>
+                        <div className="modal-body">
+                            <div className="modal-image-container">
+                                <Image
+                                    src={selectedProduct.image || '/images/products/douro-2018.png'}
+                                    alt={selectedProduct.name}
+                                    fill
+                                    style={{ objectFit: 'contain', padding: '2rem' }}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                />
+                            </div>
+                            <div className="modal-info">
+                                <div className="modal-header">
+                                    <h2>{selectedProduct.name}</h2>
+                                    <span className="product-type">{selectedProduct.type}</span>
+                                </div>
+
+                                <div className="product-meta" style={{ marginBottom: '1.5rem' }}>
+                                    <span className="product-region">📍 {selectedProduct.region || 'Portugal'}</span>
+                                    <span className="product-year">🗓️ {selectedProduct.year}</span>
+                                </div>
+
+                                <p className="modal-description">{selectedProduct.description}</p>
+
+                                <div className="modal-footer">
+                                    <span className="product-price" style={{ fontSize: '2rem' }}>€{selectedProduct.price.toFixed(2)}</span>
+                                    <button
+                                        className="btn-add-cart"
+                                        onClick={() => {
+                                            addToCart(selectedProduct);
+                                            setSelectedProduct(null);
+                                        }}
+                                    >
+                                        <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Adicionar ao Carrinho
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
             <Footer />
         </>
